@@ -47,10 +47,5 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.gagl.fwk</groupId>
-			<artifactId>dao-framework</artifactId>
-			<version>1.0.0</version>
-		</dependency>
 	</dependencies>
 </project>
