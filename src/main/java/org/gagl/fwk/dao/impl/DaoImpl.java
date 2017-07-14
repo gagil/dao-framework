@@ -23,7 +23,7 @@ public class DaoImpl extends DaoAbstractImpl implements Dao,Serializable {
 	}
 
 	public void delete(Object pEntity) throws Exception {
-		this.getCurrentSession().delete(pEntity);	
+		this.getCurrentSession().delete(pEntity);			
 	}
 		
 
