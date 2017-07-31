@@ -1,13 +1,18 @@
 package org.gagl.fwk.dao.impl;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.gagl.fwk.dao.DaoFinder;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.transform.Transformers;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -83,7 +88,6 @@ public class DaoFinderImpl extends DaoAbstractImpl implements DaoFinder, Seriali
 	 * @param pSqlQuery query a ejecutar
 	 * @param pEntity tipo de la entidad que retorna
 	 * @return List<T> lista de entidades que retornara
-	 * @see org.gagl.fwk.dao.DaoFinder#findBySqlQuery(java.lang.String, java.lang.Class)
 	 */
 	public <T> List<T> findBySqlQuery(String pSqlQuery, @SuppressWarnings("rawtypes") Class pEntity) {
 		Query query= this.getCurrentSession().createSQLQuery(pSqlQuery);
@@ -91,7 +95,31 @@ public class DaoFinderImpl extends DaoAbstractImpl implements DaoFinder, Seriali
 		@SuppressWarnings("unchecked")
 		List<T> list=query.list();
 		return list;
-	}	
+	}
+	
+	/*
+	 * Ejecuta una consulta con detached criteria
+	 * @param DetachedCriteria pCriteria criteria a ejecutar
+	 * @return List<T> lista de entidades que retornara
+	 */
+	public <T> List<T> findByDetachedCriteria(DetachedCriteria pCriteria){
+		
+		Session session=this.getCurrentSession();
+		Criteria cr=pCriteria.getExecutableCriteria(session);
+		
+		return cr.list();		
+		
+	}
+	
+	/*
+	 * Ejecuta una consulta con detached criteria
+	 * @param Collection<T> pList lista que contiene el objeto entidad
+	 * @return T entidad que retornara como unico resultado
+	 */		
+	public <T> T uniqueResult(Collection<T> pList){
+		return (T) DataAccessUtils.uniqueResult(pList);
+	}
+	
 	
 	public void setQueryParameters(Query pQuery,Map<Integer,Object> pParams){
 		for (Map.Entry<Integer,Object> entry : pParams.entrySet()) {
